@@ -4,12 +4,12 @@ import { MemoryCard } from "../../_types";
 import FlippingCard from "../FlippingCard";
 import { GameBoardContainer, YouWin } from "./GameBoard.Styled";
 import { wait } from "../../utils/wait";
-import { GenerateDeck } from "../../utils/deck";
+import { generateDeck } from "../../utils/deck";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 
 const GameBoard: FC = () => {
   const deckSize = 16;
-  const { ids, cards } = useMemo(() => GenerateDeck(deckSize), []);
+  const { ids, cards } = useMemo(() => generateDeck(deckSize), []);
   const [selectedCards, setSelectedCards] = useState([] as MemoryCard[]);
   const [foundCardsIds, setFoundCardsIds] = useState([] as number[]);
 

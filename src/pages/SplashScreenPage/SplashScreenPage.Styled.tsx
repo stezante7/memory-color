@@ -2,15 +2,15 @@ import styled from "@emotion/styled";
 
 export const PlayButtonWrapper = styled.div`
   width: 100%;
-  height: 100%;
+  height: 100vh;
   text-align: center;
   margin-top: 10%;
 `;
 
 export const OverlayLabel = styled.div`
   position: absolute;
-  font-size: 3.5em;
-  color: #774693;
+  font-size: 2.5em;
+  color: #fff;
   margin: 0 auto;
   bottom: 20%;
   width: 100%;
@@ -23,8 +23,8 @@ export const PlayButton = styled.button`
   border-style: solid;
   border-width: 20px;
   border-radius: 100%;
-  height: 500px;
-  width: 500px;
+  height: 300px;
+  width: 300px;
   cursor: pointer;
 
   background-image: url(./splash.png);

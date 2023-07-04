@@ -14,16 +14,6 @@ interface Props {
   found: boolean;
 }
 
-const decimalToRgb = (decimal: number) => {
-  const decimalWithFactor = decimal * 7;
-  return (
-    "#" +
-    ((decimalWithFactor >> 16) & 0xff) +
-    ((decimalWithFactor >> 8) & 0xff) +
-    (decimalWithFactor & 0xff)
-  );
-};
-
 const FlippingCard: FC<Props> = ({ card, onClick, found, selected }) => {
   const handleCardClick = () => {
     onClick();
@@ -32,7 +22,7 @@ const FlippingCard: FC<Props> = ({ card, onClick, found, selected }) => {
   return (
     <FlippingCardFrame>
       <FlippingCardInner flipped={found || selected}>
-        <FlippingCardFront color={decimalToRgb(card.value)}></FlippingCardFront>
+        <FlippingCardFront color={card.color}></FlippingCardFront>
         <FlippingCardBack onClick={handleCardClick}></FlippingCardBack>
       </FlippingCardInner>
     </FlippingCardFrame>
