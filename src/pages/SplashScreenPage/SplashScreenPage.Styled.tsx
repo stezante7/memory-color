@@ -10,9 +10,9 @@ export const PlayButtonWrapper = styled.div`
 export const OverlayLabel = styled.div`
   position: absolute;
   font-size: 2.5em;
-  color: #fff;
+  color: #6a7298;
   margin: 0 auto;
-  bottom: 20%;
+  bottom: 10%;
   width: 100%;
   text-align: center;
 `;
@@ -23,8 +23,10 @@ export const PlayButton = styled.button`
   border-style: solid;
   border-width: 20px;
   border-radius: 100%;
-  height: 300px;
-  width: 300px;
+  height: 100%;
+  width: 100%;
+  max-width: 400px;
+  max-height: 400px;
   cursor: pointer;
 
   background-image: url(./splash.png);

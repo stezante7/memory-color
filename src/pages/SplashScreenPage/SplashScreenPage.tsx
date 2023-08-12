@@ -16,7 +16,7 @@ const SplashScreenPage: FC = () => {
   return (
     <PlayButtonWrapper>
       <PlayButton onClick={playGame}>
-        <OverlayLabel>Let's Play!</OverlayLabel>
+        <OverlayLabel>PLAY!</OverlayLabel>
       </PlayButton>
     </PlayButtonWrapper>
   );
