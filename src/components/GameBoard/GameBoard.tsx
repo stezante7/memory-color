@@ -14,25 +14,27 @@ const GameBoard: FC = () => {
   const [foundCardsIds, setFoundCardsIds] = useState([] as number[]);
 
   const handleCardClick = async (selectedCard: MemoryCard) => {
-    if (selectedCards.length >= 2) {
+    const isCardAlreadySelected = selectedCards.some(
+      (card) => card.id === selectedCard.id
+    );
+
+    if (selectedCards.length >= 2 || isCardAlreadySelected) {
       return;
     }
 
     setSelectedCards([...selectedCards, selectedCard]);
 
-    if (selectedCards.length === 0) {
-      return;
+    if (selectedCards.length === 1) {
+      await wait(1000); // Wait time to show the card before checking results
+
+      const prevSelected = selectedCards[0];
+
+      if (prevSelected.value === selectedCard.value) {
+        setFoundCardsIds([...foundCardsIds, prevSelected.id, selectedCard.id]);
+      }
+
+      setSelectedCards([]);
     }
-
-    await wait(1000);
-
-    const prevSelected = selectedCards[0];
-
-    if (prevSelected.value === selectedCard.value) {
-      setFoundCardsIds([...foundCardsIds, prevSelected.id, selectedCard.id]);
-    }
-
-    setSelectedCards([]);
   };
 
   const youWin = foundCardsIds.length === deckSize;
