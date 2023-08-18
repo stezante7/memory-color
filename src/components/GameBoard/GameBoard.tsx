@@ -2,16 +2,21 @@ import { Typography } from "@mui/material";
 import { FC, useMemo, useState } from "react";
 import { MemoryCard } from "../../_types";
 import FlippingCard from "../FlippingCard";
-import { GameBoardContainer, YouWin } from "./GameBoard.Styled";
+import { GameBoardContainer, ScorePanel, YouWin } from "./GameBoard.Styled";
 import { wait } from "../../utils/wait";
 import { generateDeck } from "../../utils/deck";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 
 const GameBoard: FC = () => {
   const deckSize = 16;
+
+  const scorePenalty = 5;
+
   const { ids, cards } = useMemo(() => generateDeck(deckSize), []);
   const [selectedCards, setSelectedCards] = useState([] as MemoryCard[]);
   const [foundCardsIds, setFoundCardsIds] = useState([] as number[]);
+  const [score, setScore] = useState(0);
+  const [scoreIncrement, setScoreIncrement] = useState(50);
 
   const handleCardClick = async (selectedCard: MemoryCard) => {
     const isCardAlreadySelected = selectedCards.some(
@@ -31,6 +36,10 @@ const GameBoard: FC = () => {
 
       if (prevSelected.value === selectedCard.value) {
         setFoundCardsIds([...foundCardsIds, prevSelected.id, selectedCard.id]);
+        setScore(score + scoreIncrement);
+      } else {
+        const scoreWithPenality = scoreIncrement - scorePenalty;
+        setScoreIncrement(scoreWithPenality < 0 ? 0 : scoreWithPenality);
       }
 
       setSelectedCards([]);
@@ -41,6 +50,11 @@ const GameBoard: FC = () => {
 
   return (
     <>
+      <ScorePanel>
+        <span>
+          Score: {score} (+{scoreIncrement})
+        </span>
+      </ScorePanel>
       <GameBoardContainer>
         {ids.map((id) => {
           const deckCard = cards[id];

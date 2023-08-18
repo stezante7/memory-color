@@ -9,7 +9,16 @@ export const GameBoardContainer = styled.div`
   max-width: 95vw;
   max-height: 95vw;
   gap: 12px;
-  margin: 5% auto;
+  margin: 0px auto;
+`;
+
+export const ScorePanel = styled.div`
+  font-family: "Caveat", cursive;
+  width: 80vh;
+  margin: 20px auto;
+  margin-top: 5%;
+  color: #fff;
+  font-size: 2.2em;
 `;
 
 export const YouWin = styled.div`
