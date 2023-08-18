@@ -15,8 +15,7 @@ export const GameBoardContainer = styled.div`
 export const ScorePanel = styled.div`
   font-family: "Caveat", cursive;
   width: 80vh;
-  margin: 20px auto;
-  margin-top: 5%;
+  margin: 20px auto 20px;
   color: #fff;
   font-size: 2.2em;
 `;
