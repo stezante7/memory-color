@@ -3,5 +3,3 @@ export type MemoryCard = {
   value: number;
   color: string;
 };
-
-export type Deck = { [key: number]: MemoryCard };

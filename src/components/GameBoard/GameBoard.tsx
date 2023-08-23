@@ -1,83 +1,75 @@
-import { Typography } from "@mui/material";
-import { FC, useMemo, useState } from "react";
-import { MemoryCard } from "../../_types";
-import FlippingCard from "../FlippingCard";
-import { GameBoardContainer, ScorePanel, YouWin } from "./GameBoard.Styled";
-import { wait } from "../../utils/wait";
-import { generateDeck } from "../../utils/deck";
+import { Button, Typography } from "@mui/material";
+import { FC, useState } from "react";
+import { ScorePanel, YouWin } from "./GameBoard.Styled";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+import GameLevel from "../GameLevel";
+import { generateDeck } from "../../utils/deck";
+
+const calculateDeckSize = (level: number) => {
+  const startingDeckDimension = 2;
+  const dimensionFactor = level * 2;
+
+  const deckSize =
+    (startingDeckDimension + dimensionFactor) *
+    (startingDeckDimension + dimensionFactor);
+
+  return deckSize;
+};
 
 const GameBoard: FC = () => {
-  const deckSize = 16;
+  const [level, setLevel] = useState(0);
 
-  const scorePenalty = 5;
-
-  const { ids, cards } = useMemo(() => generateDeck(deckSize), []);
-  const [selectedCards, setSelectedCards] = useState([] as MemoryCard[]);
+  const initialDeckSize = calculateDeckSize(level);
+  const [movesLeft, setMovesLeft] = useState(initialDeckSize);
+  const [deck, setDeck] = useState(generateDeck(initialDeckSize));
   const [foundCardsIds, setFoundCardsIds] = useState([] as number[]);
-  const [score, setScore] = useState(0);
-  const [scoreIncrement, setScoreIncrement] = useState(50);
 
-  const handleCardClick = async (selectedCard: MemoryCard) => {
-    const isCardAlreadySelected = selectedCards.some(
-      (card) => card.id === selectedCard.id
-    );
-
-    if (selectedCards.length >= 2 || isCardAlreadySelected) {
-      return;
-    }
-
-    setSelectedCards([...selectedCards, selectedCard]);
-
-    if (selectedCards.length === 1) {
-      await wait(1000); // Wait time to show the card before checking results
-
-      const prevSelected = selectedCards[0];
-
-      if (prevSelected.value === selectedCard.value) {
-        setFoundCardsIds([...foundCardsIds, prevSelected.id, selectedCard.id]);
-        setScore(score + scoreIncrement);
-      } else {
-        const scoreWithPenality = scoreIncrement - scorePenalty;
-        setScoreIncrement(scoreWithPenality < 0 ? 0 : scoreWithPenality);
-      }
-
-      setSelectedCards([]);
-    }
+  const handleCoupleFound = (cardAId: number, cardBId: number) => {
+    setFoundCardsIds([...foundCardsIds, cardAId, cardBId]);
+    setMovesLeft(movesLeft - 1);
   };
 
-  const youWin = foundCardsIds.length === deckSize;
+  const handleCoupleNotFound = () => {
+    setMovesLeft(movesLeft - 1);
+  };
+
+  const nextLevel = () => {
+    const deckSize = calculateDeckSize(level + 1);
+
+    setMovesLeft(deckSize);
+    setLevel(level + 1);
+    setDeck(generateDeck(deckSize));
+    setFoundCardsIds([]);
+  };
+
+  const youWin = foundCardsIds.length === deck.length;
 
   return (
     <>
       <ScorePanel>
-        <span>
-          Score: {score} (+{scoreIncrement})
-        </span>
+        <span>Moves left: {movesLeft}</span>
       </ScorePanel>
-      <GameBoardContainer>
-        {ids.map((id) => {
-          const deckCard = cards[id];
-
-          return (
-            <FlippingCard
-              key={`${id}_card`}
-              card={deckCard}
-              selected={selectedCards.map((card) => card.id).includes(id)}
-              found={foundCardsIds.includes(id)}
-              onClick={() => handleCardClick(deckCard)}
-            />
-          );
-        })}
-      </GameBoardContainer>
+      <GameLevel
+        deck={deck}
+        onCoupleFound={handleCoupleFound}
+        onCoupleNotFound={handleCoupleNotFound}
+        foundCardsIds={foundCardsIds}
+      />
       {youWin && (
         <YouWin>
           <div>
-            <Typography variant="h2">You win!</Typography>
-            <Typography variant="h3">
-              Well done mate{" "}
-              <EmojiEventsIcon fontSize="large"></EmojiEventsIcon>
-            </Typography>
+            <h2>
+              Level Complete!<span className="celebration"></span>
+            </h2>
+            <h3>- Cowabunga -</h3>
+            <Button
+              onClick={nextLevel}
+              variant="contained"
+              size="large"
+              className="nextLevel"
+            >
+              Next Level
+            </Button>
           </div>
         </YouWin>
       )}

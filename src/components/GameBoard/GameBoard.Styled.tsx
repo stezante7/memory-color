@@ -1,19 +1,6 @@
 import styled from "@emotion/styled";
 
-export const GameBoardContainer = styled.div`
-  display: grid;
-  grid-template-rows: 1fr 1fr 1fr 1fr;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  height: 80vh;
-  width: 80vh;
-  max-width: 95vw;
-  max-height: 95vw;
-  gap: 12px;
-  margin: 0px auto;
-`;
-
 export const ScorePanel = styled.div`
-  font-family: "Caveat", cursive;
   width: 80vh;
   margin: 20px auto 20px;
   color: #fff;
@@ -21,7 +8,7 @@ export const ScorePanel = styled.div`
 `;
 
 export const YouWin = styled.div`
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(255, 255, 255, 0.8);
   height: 100%;
   width: 100%;
   padding: 10px;
@@ -29,9 +16,35 @@ export const YouWin = styled.div`
   top: 0;
   left: 0;
 
+  h2 {
+    font-size: 4em;
+
+    span.celebration {
+      height: 2em;
+      width: 2em;
+
+      display: block;
+      background-position-x: right;
+      background-image: url("./celebration.png");
+      background-repeat: no-repeat;
+      background-size: contain;
+
+      margin: 0 auto;
+    }
+  }
+
+  h3 {
+    font-size: 3em;
+  }
+
   div {
-    margin: 20%;
-    color: #fff;
+    margin: 10% 20% 10% 20%;
+    color: #727272;
     text-align: center;
+  }
+
+  .nextLevel {
+    font-family: "Caveat", cursive;
+    font-size: 1.5em;
   }
 `;

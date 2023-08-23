@@ -1,4 +1,4 @@
-import { Deck } from "../_types";
+import { MemoryCard } from "../_types";
 
 const generateRandomColor = () => {
   const letters = "0123456789ABCDEF";
@@ -10,9 +10,7 @@ const generateRandomColor = () => {
   return `#${color}`;
 };
 
-export const generateDeck = (
-  deckSize: number
-): { ids: number[]; cards: Deck } => {
+export const generateDeck = (deckSize: number): MemoryCard[] => {
   const ids = [...Array(deckSize).keys()].sort(() => Math.random() - 0.5);
   const colors = [...Array(deckSize).keys()].reduce(
     (acc, idx) =>
@@ -20,18 +18,17 @@ export const generateDeck = (
     [] as string[]
   );
 
-  return {
-    ids,
-    cards: ids.reduce(
-      (acc, idx) => ({
-        ...acc,
-        [idx]: {
-          id: idx,
-          value: idx % 2 != 0 ? idx - 1 : idx,
-          color: colors[idx],
-        },
-      }),
-      {} as { ids: number[]; cards: Deck }
-    ),
-  };
+  const cards = ids.reduce(
+    (acc, idx) => [
+      ...acc,
+      {
+        id: idx,
+        value: idx % 2 != 0 ? idx - 1 : idx,
+        color: colors[idx],
+      },
+    ],
+    [] as MemoryCard[]
+  );
+
+  return cards;
 };
