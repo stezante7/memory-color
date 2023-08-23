@@ -1,7 +1,6 @@
-import { Button, Typography } from "@mui/material";
+import { Button } from "@mui/material";
 import { FC, useState } from "react";
 import { ScorePanel, YouWin } from "./GameBoard.Styled";
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import GameLevel from "../GameLevel";
 import { generateDeck } from "../../utils/deck";
 
