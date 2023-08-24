@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
-import { FC, useState } from "react";
-import { ScorePanel, YouWin } from "./GameBoard.Styled";
+import { FC, useEffect, useState } from "react";
+import { ScorePanel, YouLoose, YouWin } from "./GameBoard.Styled";
 import GameLevel from "../GameLevel";
 import { generateDeck } from "../../utils/deck";
 
@@ -15,6 +15,8 @@ const calculateDeckSize = (level: number) => {
   return deckSize;
 };
 
+const COUPLE_FOUND_SCORE_INCREMENT = 50;
+
 const GameBoard: FC = () => {
   const [level, setLevel] = useState(0);
 
@@ -22,10 +24,13 @@ const GameBoard: FC = () => {
   const [movesLeft, setMovesLeft] = useState(initialDeckSize);
   const [deck, setDeck] = useState(generateDeck(initialDeckSize));
   const [foundCardsIds, setFoundCardsIds] = useState([] as number[]);
+  const [score, setScore] = useState(0);
+  const [best, setBest] = useState(0);
 
   const handleCoupleFound = (cardAId: number, cardBId: number) => {
     setFoundCardsIds([...foundCardsIds, cardAId, cardBId]);
-    setMovesLeft(movesLeft - 1);
+    setMovesLeft(movesLeft + 1);
+    setScore(score + COUPLE_FOUND_SCORE_INCREMENT);
   };
 
   const handleCoupleNotFound = () => {
@@ -41,12 +46,33 @@ const GameBoard: FC = () => {
     setFoundCardsIds([]);
   };
 
+  const resetGame = () => {
+    const deckSize = calculateDeckSize(0);
+
+    setMovesLeft(deckSize);
+    setLevel(0);
+    setScore(0);
+    setDeck(generateDeck(deckSize));
+    setFoundCardsIds([]);
+  };
+
+  useEffect(() => {
+    if (movesLeft === 0 && score > best) {
+      setBest(score);
+    }
+  });
+
   const youWin = foundCardsIds.length === deck.length;
+  const youLoose = movesLeft === 0;
 
   return (
     <>
       <ScorePanel>
-        <span>Moves left: {movesLeft}</span>
+        <div className="movesLeft">Moves left: {movesLeft}</div>
+        <div className="scores">
+          <span>Score: {score}</span>
+          <span className="divider">Best: {best === 0 ? "-" : best}</span>
+        </div>
       </ScorePanel>
       <GameLevel
         deck={deck}
@@ -71,6 +97,31 @@ const GameBoard: FC = () => {
             </Button>
           </div>
         </YouWin>
+      )}
+      {youLoose && (
+        <YouLoose>
+          <div>
+            <h4>
+              Final Score: <span className="finalScore">{score}</span>{" "}
+              {score === best && (
+                <span>
+                  - Best Score <span className="bestScore"></span>
+                </span>
+              )}
+            </h4>
+            <h2>Oh no - you have run out of moves!</h2>
+            <h3>- ba ba ba - </h3>
+            <Button
+              onClick={resetGame}
+              variant="contained"
+              size="large"
+              color="warning"
+              className="anotherGameBtn"
+            >
+              One more, please!
+            </Button>
+          </div>
+        </YouLoose>
       )}
     </>
   );
