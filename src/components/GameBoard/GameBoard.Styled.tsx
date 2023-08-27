@@ -1,19 +1,14 @@
 import styled from "@emotion/styled";
 
 export const ScorePanel = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   width: 80vh;
+  max-width: 95vw;
+
   margin: 20px auto 20px;
-  padding: 0px 20px 0px 20px;
   color: #fff;
   font-size: 2.2em;
-
-  .movesLeft {
-    width: 60%;
-  }
-
-  .scores {
-    width: 40%;
-  }
 
   div {
     display: inline-block;

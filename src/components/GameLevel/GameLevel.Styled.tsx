@@ -1,16 +1,13 @@
 import styled from "@emotion/styled";
 
-const buildGridTemplateCss = (rows: number) =>
-  Array.from(Array(rows)).reduce((acc, _) => acc + " 1fr", "");
-
 interface GameLevelWrapperProps {
   rowSize: number;
 }
 
 export const GameLevelWrapper = styled.div<GameLevelWrapperProps>`
   display: grid;
-  grid-template-rows: ${(props) => buildGridTemplateCss(props.rowSize)};
-  grid-template-columns: ${(props) => buildGridTemplateCss(props.rowSize)};
+  grid-template-rows: ${(props) => `repeat(${props.rowSize}, 1fr)`};
+  grid-template-columns: ${(props) => `repeat(${props.rowSize}, 1fr)`};
   height: 80vh;
   width: 80vh;
   max-width: 95vw;

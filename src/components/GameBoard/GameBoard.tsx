@@ -68,8 +68,8 @@ const GameBoard: FC = () => {
   return (
     <>
       <ScorePanel>
-        <div className="movesLeft">Moves left: {movesLeft}</div>
-        <div className="scores">
+        <div>Moves left: {movesLeft}</div>
+        <div>
           <span>Score: {score}</span>
           <span className="divider">Best: {best === 0 ? "-" : best}</span>
         </div>
