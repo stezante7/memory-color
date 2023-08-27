@@ -3,6 +3,7 @@ import { FC, useEffect, useState } from "react";
 import { ScorePanel, YouLoose, YouWin } from "./GameBoard.Styled";
 import GameLevel from "../GameLevel";
 import { generateDeck } from "../../utils/deck";
+import { wait } from "../../utils/wait";
 
 const calculateDeckSize = (level: number) => {
   const startingDeckDimension = 2;
@@ -26,6 +27,8 @@ const GameBoard: FC = () => {
   const [foundCardsIds, setFoundCardsIds] = useState([] as number[]);
   const [score, setScore] = useState(0);
   const [best, setBest] = useState(0);
+  const [resettingGame, setResettingGame] = useState(false);
+  const [loadingNextLevel, setLoadingNextLevel] = useState(false);
 
   const handleCoupleFound = (cardAId: number, cardBId: number) => {
     setFoundCardsIds([...foundCardsIds, cardAId, cardBId]);
@@ -37,23 +40,33 @@ const GameBoard: FC = () => {
     setMovesLeft(movesLeft - 1);
   };
 
-  const nextLevel = () => {
+  const nextLevel = async () => {
+    setLoadingNextLevel(true);
+
     const deckSize = calculateDeckSize(level + 1);
 
     setMovesLeft(deckSize);
     setLevel(level + 1);
     setDeck(generateDeck(deckSize));
     setFoundCardsIds([]);
+
+    await wait(1000);
+    setLoadingNextLevel(false);
   };
 
-  const resetGame = () => {
+  const resetGame = async () => {
     const deckSize = calculateDeckSize(0);
+
+    setResettingGame(true);
 
     setMovesLeft(deckSize);
     setLevel(0);
     setScore(0);
     setDeck(generateDeck(deckSize));
     setFoundCardsIds([]);
+
+    await wait(1000);
+    setResettingGame(false);
   };
 
   useEffect(() => {
@@ -80,9 +93,13 @@ const GameBoard: FC = () => {
         onCoupleNotFound={handleCoupleNotFound}
         foundCardsIds={foundCardsIds}
       />
-      {youWin && (
+      {(youWin || loadingNextLevel) && (
         <YouWin>
-          <div>
+          <div
+            className={
+              loadingNextLevel === true ? "loadingNextLevelAnimation" : ""
+            }
+          >
             <h2>
               Level Complete!<span className="celebration"></span>
             </h2>
@@ -92,17 +109,24 @@ const GameBoard: FC = () => {
               variant="contained"
               size="large"
               className="nextLevel"
+              disabled={loadingNextLevel}
             >
               Next Level
             </Button>
           </div>
         </YouWin>
       )}
-      {youLoose && (
+      {(youLoose || resettingGame) && (
         <YouLoose>
           <div>
             <h4>
-              Final Score: <span className="finalScore">{score}</span>{" "}
+              <div
+                className={
+                  resettingGame === true ? "resettingGameAnimation" : ""
+                }
+              >
+                Final Score: <span className="finalScore">{score}</span>{" "}
+              </div>
               {score === best && (
                 <span>
                   - Best Score <span className="bestScore"></span>
@@ -117,6 +141,7 @@ const GameBoard: FC = () => {
               size="large"
               color="warning"
               className="anotherGameBtn"
+              disabled={resettingGame}
             >
               One more, please!
             </Button>

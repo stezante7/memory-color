@@ -1,4 +1,8 @@
+import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
+import { bounce } from "react-animations";
+
+const bounceAnimation = keyframes`${bounce}`;
 
 interface GameLevelWrapperProps {
   rowSize: number;
@@ -14,4 +18,6 @@ export const GameLevelWrapper = styled.div<GameLevelWrapperProps>`
   max-height: 95vw;
   gap: 12px;
   margin: 0px auto;
+
+  animation: 1s ${bounceAnimation};
 `;

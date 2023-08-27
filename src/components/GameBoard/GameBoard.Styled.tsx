@@ -1,4 +1,9 @@
+import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
+import { bounceOut, rotateOut } from "react-animations";
+
+const rotateOutAnimation = keyframes`${rotateOut}`;
+const bounceOutAnimation = keyframes`${bounceOut}`;
 
 export const ScorePanel = styled.div`
   display: grid;
@@ -34,6 +39,10 @@ export const YouWin = styled.div`
   position: absolute;
   top: 0;
   left: 0;
+
+  .loadingNextLevelAnimation {
+    animation: 1s ${bounceOutAnimation};
+  }
 
   h2 {
     font-size: 4em;
@@ -94,6 +103,10 @@ export const YouLoose = styled.div`
   h4 {
     font-size: 3em;
     border-bottom: solid;
+
+    .resettingGameAnimation {
+      animation: 1s ${rotateOutAnimation};
+    }
   }
 
   .finalScore {
